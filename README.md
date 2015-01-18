@@ -2,12 +2,12 @@
 
 ## Why? ##
 
-To see how a basic WebRTC signaling service can be realized with node and websockets.
+I had to do a spiking about WebRTC signaling for a project.
 
 ## What? ##
 
-A hub that connects 2 users through websocket to transmit WebRTC offers, answers and ICE candidates.
+A websocket server that connects 2 users through to transmit WebRTC offers, answers and ICE candidates.
 
 ## How? ##
 
-With the help of SockJS lib.
+Obviously NodeJS with SockJS to handle websocket connections.
