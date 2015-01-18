@@ -1,17 +1,17 @@
 // required libraries
 var http = require('http');
 var node_static = require('node-static');
+var sockjs = require('sockjs');
 
 // internal modules
-var Messaging = require('./lib/Messaging');
-var Signaling = require('./lib/Signaling');
+var Hub = require('./lib/Hub');
 
 // configuration variables
 var SERVER_ADDRESS = 'localhost';
 var SERVER_PORT = 1337;
 var STATIC_DIRECTORY = '/static';
 
-// create static server
+// create static file request handler
 var staticHandler = new node_static.Server(__dirname + STATIC_DIRECTORY);
 
 // create an http server
@@ -23,13 +23,21 @@ server.addListener('upgrade', function(req,res){
     res.end();
 });
 
-// create socket handlers
-// var messagingSocket = new Messaging();
-var signalingSocket = new Signaling();
+// create a hub for websocket connections
+var hub = new Hub();
 
-// install socket handlers
-// messagingSocket.install(server, {prefix: '/messaging'})
-signalingSocket.install(server, {prefix: '/signaling'})
+// create websocket server
+var socketServer = sockjs.createServer();
 
-// start the server
+// on new connection add to hub
+socketServer.on('connection', function handleConnect (conn) {
+  hub.addConnection(conn);
+});
+
+// install websocket server
+socketServer.installHandlers(server, {
+  prefix: '/signaling'
+});
+
+// start the http server
 server.listen(SERVER_PORT, SERVER_ADDRESS);

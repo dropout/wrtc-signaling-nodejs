@@ -1,7 +1,3 @@
-var Messaging = require('./lib/Messaging');
-var Signaling = require('./lib/Signaling');
+var Hub = require('./lib/Hub');
 
-module.exports = {
-	messaging: Messaging
-	,signaling: Signaling
-};
+module.exports = Hub;
